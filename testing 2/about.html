@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        #container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            width: 100%;
+        }
+
+        
+        .button-container {
+            position: absolute;
+            z-index: 1; /* Ensure buttons appear above the globe */
+            margin: auto;
+            
+            
+        }
+
+        /* Styles for specific button containers */
+        #button1-container {
+            top: 5%;
+            left: 2%;
+        }
+
+        #button2-container {
+            top: 5%;
+            left: 35%;
+        }
+
+        #button3-container {
+            top: 5%;
+            left: 50%;
+        }
+
+        #button4-container {
+            top: 5%;
+            right: 30%;
+            
+        }
+
+
+        #music-button-container {
+            top: 5%;
+            right: 2%;
+            transform: translateX(-50%);
+        }
+
+        .toggle-button {
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        /* Specific styles for each button */
+        #button1 {
+            background-color: #ff6b6b00;
+            color: white;
+            border-radius: 25px;
+            font-size: 1vw;
+            
+        }
+
+        #button2 {
+            background-color: #4ecdc500;
+            color: white;
+            border-radius: 5px;
+            font-size: 1vw;
+        }
+
+        #button3 {
+            background-color: #45b7d100;
+            color: white;
+            border-radius: 0;
+            font-size: 1vw;
+        }
+
+        #button4 {
+            background-color: #f7b83100;
+            color: white;
+            border-radius: 15px;
+            font-size: 1vw;
+        }
+
+        
+        #music-button {
+            background-color: #a45eea00;
+            color: white;
+            border-radius: 10px;
+            font-size: 1vw;
+        }
+
+        .toggle-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        
+        /* Additional styles for the card */
+        .card {
+            width: 75%;
+            background-color: rgba(240, 240, 240, 0); /* Background color with opacity */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            animation: fallDown 0.1s ease-out forwards;
+            display: flex; /* Use flexbox for layout */
+            margin: auto;
+            margin-top: 250px;
+            size: 100%;
+        }
+
+        .card img {
+            width: 50%; /* Image takes 50% of the card width */
+            height: auto;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .card-content {
+            width: 50%; /* Text content takes 50% of the card width */
+            padding: 20px;
+            box-sizing: border-box; /* Ensure padding doesn't increase width */
+        }
+
+        .card-content h2 {
+            font-size: 2.5vw;
+            margin-top: 0;
+            transition: font-size 0.3s ease;
+            color: rgb(167, 165, 163);
+        }
+
+        .card-content h2:hover {
+            font-size: 4vw;
+            color: aliceblue;
+        }
+        
+        .card-content h3 {
+            font-size: 1.2vw;
+            margin-top: 0;
+            color: rgb(167, 165, 163);
+        }
+
+        .card-content p {
+            font-size: 1.2vw;
+            line-height: 1.6;
+            text-align: justify;
+            color: aliceblue;
+
+        }
+
+        @keyframes fallDown {
+            0% {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .card:hover img {
+            transform: translateY(20px); /* Example of image movement on hover */
+        }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+
+    <div id="button1-container" class="button-container">
+        <a href="about.html"><button id="button1" class="toggle-button">Home Page</button></a>
+    </div>
+    <div id="button2-container" class="button-container">
+        <a href="experience.html"><button id="button2" class="toggle-button">Experience</button></a>
+    </div>
+    <div id="button3-container" class="button-container">
+        <a href="projects.html"><button id="button3" class="toggle-button">Projects</button></a>
+    </div>
+    <div id="button4-container" class="button-container">
+        <a href="contact.html"><button id="button4" class="toggle-button">Contact</button></a>
+    </div>
+    <div id="music-button-container" class="button-container">
+        <button id="music-button" class="toggle-button">Play Music</button>
+    </div>
+
+    <div class="card">
+        <img src="./assets/pic 2.jpg" alt="Card Image">
+        <div class="card-content">
+            <h2>Mohamad Illham</h2>
+            <h3>I'm a</h3>
+            <p> Data analyst</p>
+            <p>With a keen eye for hidden narratives, this data analyst thrives on uncovering actionable insights from complex information. 
+               I'm particularly excited by the potential of AI to radically transform the landscape of data exploration, fueling their passion for continuous discovery.
+            </p>
+        </div>
+    </div>
+
+    <!-- Three.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+   <!-- JavaScript for Three.js and music control -->
+   <script>
+    // Get the container element where the globe will be placed
+    const container = document.getElementById('container');
+
+    // Create a new Three.js scene
+    const scene = new THREE.Scene();
+
+    // Create a perspective camera with a field of view, aspect ratio, near and far clipping plane
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+    // Create a WebGL renderer with antialiasing
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+
+    // Set renderer size to match the window dimensions
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    // Append renderer DOM element to the container
+    container.appendChild(renderer.domElement);
+
+    // Load the texture for the globe using TextureLoader
+    const textureLoader = new THREE.TextureLoader();
+    const texture = textureLoader.load('./assets/landscape.jpg'); // Replace with your path to the texture image
+
+    // Add ambient light to the scene
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+
+    // Add a point light with a position to create shading
+    const pointLight = new THREE.PointLight(0xffffff, 0.5);
+    pointLight.position.set(5, 3, 5);
+    scene.add(pointLight);
+
+    // Create a material for the globe using MeshPhongMaterial with bump mapping
+    const material = new THREE.MeshPhongMaterial({
+        map: texture,
+        bumpMap: texture,
+        bumpScale: 0.05,
+    });
+
+    // Create a sphere geometry with radius, width and height segments
+    const geometry = new THREE.SphereGeometry(5, 64, 64);
+
+    // Create a mesh using the geometry and material
+    const globe = new THREE.Mesh(geometry, material);
+
+    // Add the globe mesh to the scene
+    scene.add(globe);
+
+    // Set initial camera position
+    camera.position.z = 10;
+
+    // Function to animate the scene
+    function animate() {
+        requestAnimationFrame(animate);
+        // Rotate the globe
+        globe.rotation.y += 0.008;
+        // Render the scene with the camera
+        renderer.render(scene, camera);
+    }
+
+    // Start the animation
+    animate();
+
+    // Adjust camera aspect ratio and renderer size on window resize
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+
+     // JavaScript for toggling music playback
+     const musicButton = document.getElementById('music-button');
+    let audio = new Audio('./assets/fx.mp3'); // Replace with your audio file path
+
+    let isPlaying = false;
+
+    function toggleMusic() {
+        if (isPlaying) {
+            audio.pause();
+            isPlaying = false;
+            musicButton.textContent = 'Play Music';
+        } else {
+            audio.play();
+            audio.loop = true;
+            isPlaying = true;
+            musicButton.textContent = 'Pause Music';
+        }
+    }
+
+    // Set initial state and start playing music automatically
+    musicButton.textContent = 'Pause Music'; // Change button text to 'Pause Music'
+    audio.play(); // Try to autoplay the audio
+    audio.loop = true; // Loop the audio
+    isPlaying = true;
+
+    musicButton.addEventListener('click', toggleMusic);
+</script>
+</body>
+</html>
