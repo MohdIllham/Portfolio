@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacts</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url('./assets/landscape.jpg'); /* Replace with your background image path */
+            background-size: cover;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            animation: fallDown 0.5s ease-out forwards;
+        }
+        .toggle-button {
+            position: relative;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 50%;
+            background-color: #ffa70400;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            padding: 2vw 3vw; /* Adjust padding using viewport units for responsiveness */
+            font-size: 1.5vw; /* Adjust font size using viewport units for responsiveness */
+        }
+
+        .toggle-button img {
+            max-width: 50px; /* Adjust image size as needed */
+        }
+
+        .toggle-button span {
+            position: absolute;
+            bottom: -20px; /* Initial position below button */
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            font-size: 1vw; /* Adjust font size */
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+            padding: 5px 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 1; /* Ensure text is above button */
+            transition: bottom 0.3s ease; /* Smooth transition effect */
+        }
+
+        .hidden-text {
+            display: none;
+            position: fixed;
+            bottom: 50px; /* Adjust as needed */
+            left: 120px; /* Adjust as needed */
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0);
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            font-size: 1rem;
+            text-align: justify;
+            max-width: 800px;
+            width: auto;
+            z-index: 1000;
+            transition: transform 0.5s ease, opacity 0.5s ease; /* Add transition for transform and opacity */
+        }
+
+        .hidden-buttons {
+            display: none;
+            position: fixed;
+            bottom: 20px; /* Adjust as needed */
+            left: 20px; /* Adjust as needed */
+            z-index: 1000; /* Ensure it's above other elements */
+            transition: transform 0.5s ease, opacity 0.5s ease; /* Add transition for transform and opacity */
+        }
+
+        /* Styles for hidden buttons */
+        .hidden-buttons button {
+            display: inline-block;
+            margin-right: 10px;
+            padding: 8px 16px; /* Adjust padding for button size */
+            font-size: 1vw; /* Adjust font size */
+            background-color: #ffa704;
+            color: rgb(0, 0, 0);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .hidden-buttons button:hover {
+            background-color: #d3eb03; /* Darker background color on hover */
+        }
+
+        /* Show the hidden elements when the button is clicked */
+        .show {
+            display: block;
+        }
+
+        .hidden-buttons button:hover {
+            background-color: #f9fff9; /* Darker background color on hover */
+        }
+
+        .toggle-button:hover span {
+            bottom: 0; /* Move hover text up on hover */
+            display: block;
+        }
+
+        .button-container {
+            position: absolute;
+            z-index: 1; /* Ensure buttons appear above the globe */
+            margin: auto;
+        }
+
+        #toggle-button-1 {
+            padding: 10px; /* Adjust padding */
+            border-radius: 12px; /* Adjust border radius */
+            font-size: 1.5vw; /* Adjust font size */
+            position: absolute; /* Ensure absolute positioning */
+            right: 75%; /* Position 50% from the right edge of the nearest positioned ancestor */
+            bottom: 40%; /* Position 50% from the bottom edge of the nearest positioned ancestor */
+            transform: translate(50%, 50%); /* Adjust position to center the button */
+        }
+
+        #toggle-button-1:hover span {
+            bottom: 0; /* Move hover text up on hover */
+            left: -100%; /* Adjust the left position as needed */
+            display: block;
+        }
+
+        #toggle-button-2 {
+            padding: 10px; /* Adjust padding */
+            border-radius: 12px; /* Adjust border radius */
+            font-size: 1.5vw; /* Adjust font size */
+            position: absolute; /* Ensure absolute positioning */
+            right: 55%; /* Position 50% from the right edge of the nearest positioned ancestor */
+            bottom: 60%; /* Position 50% from the bottom edge of the nearest positioned ancestor */
+            transform: translate(50%, 50%); /* Adjust position to center the button */
+        }
+
+        #toggle-button-2:hover span {
+            bottom: 0; /* Move hover text up on hover */
+            bottom: -150%; /* Adjust the left position as needed */ 
+            display: block;
+        }
+
+        #toggle-button-3 {
+            padding: 10px; /* Adjust padding */
+            border-radius: 12px; /* Adjust border radius */
+            font-size: 1.5vw; /* Adjust font size */
+            position: absolute; /* Ensure absolute positioning */
+            right: 20%; /* Position 50% from the right edge of the nearest positioned ancestor */
+            bottom: 40%; /* Position 50% from the bottom edge of the nearest positioned ancestor */
+            transform: translate(50%, 50%); /* Adjust position to center the button */
+        }
+
+        #toggle-button-3:hover span {
+            bottom: 0; /* Move hover text up on hover */
+            left: -100%; /* Adjust the left position as needed */
+            display: block;
+        }
+
+        /* Styles for specific button containers */
+        #button1-container {
+            top: 5%;
+            left: 2%;
+        }
+
+        #button2-container {
+            top: 5%;
+            left: 30%;
+        }
+
+        #button3-container {
+            top: 5%;
+            left: 45%;
+        }
+
+        #button4-container {
+            top: 5%;
+            right: 30%;
+        }
+
+        #music-button-container {
+            top: 5%;
+            right: 2%;
+            transform: translateX(-50%);
+        }
+
+        /* Specific styles for each button */
+        #button1 {
+            background-color: #ff6b6b00;
+            color: white;
+            font-size: 1vw;
+        }
+
+        #button2 {
+            background-color: #4ecdc500;
+            color: white;
+            border-radius: 5px; /* Adjust border radius */
+            font-size: 1vw;
+        }
+
+        #button3 {
+            background-color: #45b7d100;
+            color: white;
+            font-size: 1vw;
+        }
+
+        #button4 {
+            background-color: #f7b83100;
+            color: white;
+            border-radius: 15px; /* Adjust border radius */
+            font-size: 1vw;
+        }
+
+        #music-button {
+            background-color: #a45eea00;
+            color: white;
+            border-radius: 10px;
+            font-size: 1vw;
+        }
+
+        .toggle-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        @media screen and (max-width: 768px) {
+            .toggle-button {
+                padding: 3vw 4vw;
+                font-size: 2.5vw;
+            }
+
+            .toggle-button span {
+                font-size: 1.8vw;
+            }
+
+            .hidden-text, .hidden-buttons {
+                font-size: 1.8vw;
+            }
+
+            .hidden-buttons button {
+                font-size: 1.5vw;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .toggle-button {
+                padding: 4vw 5vw;
+                font-size: 3.5vw;
+            }
+
+            .toggle-button span {
+                font-size: 2.5vw;
+            }
+
+            .hidden-text, .hidden-buttons {
+                font-size: 2.5vw;
+                margin-left: auto;
+            }
+
+            .hidden-buttons button {
+                font-size: 2vw;
+            }
+        }
+
+
+
+        @keyframes fallDown {
+    0% {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+    </style>
+</head>
+<body>
+    <div id="button1-container" class="button-container">
+        <a href="main.html"><button id="button1" class="toggle-button">Home Page</button></a>
+    </div>
+    <div id="button2-container" class="button-container">
+        <a href="about.html"><button id="button2" class="toggle-button">About</button></a>
+    </div>
+    <div id="button3-container" class="button-container">
+        <a href="experience.html"><button id="button3" class="toggle-button">Experience</button></a>
+    </div>
+    <div id="button4-container" class="button-container">
+        <a href="projects.html"><button id="button4" class="toggle-button">Projects</button></a>
+    </div>
+
+    <div id="music-button-container" class="button-container">
+        <button id="music-button" class="toggle-button">Play Music</button>
+    </div>
+
+    <div class="toggle-container">
+        <button id="toggle-button-1" class="toggle-button" onclick="toggleContent(1)">
+            <img src="./assets/gmail.png" alt="Toggle Image">
+            <span>100% chance of me replying the email</span>
+        </button>
+        <p class="hidden-text" id="hiddenText1">You can contact me through the button</p>
+        <div class="hidden-buttons" id="hiddenButtons1">
+            <button onclick="window.location.href='mailto:illham.mus97@gmail.com';">Email me at: illham.mus97@gmail.com</button>
+        </div>
+    </div>
+
+    <div class="toggle-container">
+        <button id="toggle-button-2" class="toggle-button" onclick="toggleContent(2)">
+            <img src="./assets/call.png" alt="Toggle Image">
+            <span>High chance of me missing it! Sorry about that!</span>
+        </button>
+        <p class="hidden-text" id="hiddenText2"> I prefer Whatsapp/Telegram</p>
+        <div class="hidden-buttons" id="hiddenButtons2">
+            <button onclick="window.location.href='tel:+60-149299020';">My Contact : +60-149299020</button>
+        </div>
+    </div>
+
+    <div class="toggle-container">
+        <button id="toggle-button-3" class="toggle-button" onclick="toggleContent(3)">
+            <img src="./assets/curriculum-vitae.png" alt="Toggle Image">
+            <span>Have a look at my humble CV</span>
+        </button>
+        <p class="hidden-text" id="hiddenText3">Download My CV</p>
+        <div class="hidden-buttons" id="hiddenButtons3">
+            <button onclick="window.location.href='https://example.com/cv';">Download My CV</button>
+        </div>
+    </div>
+
+    <!-- JavaScript for music control -->
+    <script>
+        const musicButton = document.getElementById('music-button');
+        let audio = new Audio('./assets/fx.mp3'); // Replace with your audio file path
+
+        let isPlaying = false;
+
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                isPlaying = false;
+                musicButton.textContent = 'Play Music';
+            } else {
+                audio.play();
+                audio.loop = true;
+                isPlaying = true;
+                musicButton.textContent = 'Pause Music';
+            }
+        }
+
+        // Set initial state and start playing music automatically
+        musicButton.textContent = 'Pause Music';
+        audio.play();
+        isPlaying = true;
+
+        musicButton.addEventListener('click', toggleMusic);
+
+        function toggleContent(num) {
+            const hiddenText = document.getElementById(`hiddenText${num}`);
+            const hiddenButtons = document.getElementById(`hiddenButtons${num}`);
+
+            // Hide all hidden text and buttons
+            const allHiddenTexts = document.querySelectorAll('.hidden-text');
+            const allHiddenButtons = document.querySelectorAll('.hidden-buttons');
+            allHiddenTexts.forEach(text => {
+                text.style.display = 'none';
+                text.style.transform = 'translateX(-100%)'; // Reset position for slide-in effect
+                text.style.opacity = '0'; // Reset opacity
+            });
+            allHiddenButtons.forEach(buttons => {
+                buttons.style.display = 'none';
+                buttons.style.transform = 'translateX(-100%)'; // Reset position for slide-in effect
+                buttons.style.opacity = '0'; // Reset opacity
+            });
+
+            // Display the selected hidden text and buttons with animation
+            hiddenText.style.display = 'block';
+            hiddenButtons.style.display = 'block';
+            setTimeout(() => {
+                hiddenText.style.transform = 'translateX(0)'; // Slide-in effect from the left
+                hiddenText.style.opacity = '1'; // Fade-in effect
+                hiddenButtons.style.transform = 'translateX(0)'; // Slide-in effect from the left
+                hiddenButtons.style.opacity = '1'; // Fade-in effect
+            }, 50); // Delay for smooth transition
+        }
+    </script>
+</body>
+</html>

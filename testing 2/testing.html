@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toggle Buttons Example</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        text-align: center;
+    }
+
+    .button-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .toggle-button {
+        display: block;
+        margin: 10px;
+        padding: 10px 20px;
+        background-color: #ccc;
+        border: none;
+        cursor: pointer;
+        /* Add more styles as needed */
+    }
+</style>
+</head>
+<body>
+<div class="button-container">
+    <button id="button1" class="toggle-button">Button 1</button>
+    <button id="button2" class="toggle-button">Button 2</button>
+    <button id="button3" class="toggle-button">Button 3</button>
+    <button id="button4" class="toggle-button">Button 4</button>
+    <button id="button5" class="toggle-button">Button 5</button>
+    <button id="music-button" class="toggle-button">Play Music</button>
+</div>
+
+<script>
+    // JavaScript for toggling music playback
+    const musicButton = document.getElementById('music-button');
+    let audio = new Audio('path_to_your_audio_file.mp3'); // Replace with your audio file path
+
+    let isPlaying = false;
+
+    function toggleMusic() {
+        if (isPlaying) {
+            audio.pause();
+            isPlaying = false;
+            musicButton.textContent = 'Play Music'; // Change button text to 'Play Music'
+        } else {
+            audio.play();
+            audio.loop = true; // Loop the audio
+            isPlaying = true;
+            musicButton.textContent = 'Pause Music'; // Change button text to 'Pause Music'
+        }
+    }
+
+    // Set initial state and start playing music automatically
+    musicButton.textContent = 'Pause Music'; // Default text when playing
+    audio.play(); // Start playing the audio automatically
+    isPlaying = true;
+
+    musicButton.addEventListener('click', toggleMusic);
+</script>
+</body>
+</html>
