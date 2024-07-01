@@ -3,45 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Start Page</title>
+    <title>Hyperspace Journey</title>
     <style>
-        /* Updated CSS */
         body {
             margin: 0;
+            overflow: hidden;
+            background-color: black;
+            color: white;
             font-family: Arial, sans-serif;
-            overflow: hidden; /* Prevent scrollbars */
-            position: relative; /* Ensure relative positioning for absolute elements */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
         }
-        .iframe-background {
+
+        #hyperspaceCanvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1; /* Send iframe to the back */
-            pointer-events: none; /* Allow clicking through iframe */
         }
+
+        .foreground {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 2;
+            opacity: 0; /* Hide initially */
+            transition: opacity 0.5s ease; /* Smooth opacity transition */
+        }
+
+        .foreground.visible {
+            opacity: 1; /* Show foreground when class added */
+        }
+
+        h1 {
+            font-size: 3rem;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
         .content-container {
-            position: relative; /* Ensure content is above iframe */
-            z-index: 1; /* Ensure content is above iframe */
+            z-index: 3; /* Ensure content is above canvas and foreground */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            padding: 20px;
-            color: #ffffff; /* Darker text color */
             text-align: center;
+            opacity: 1; /* Initial opacity */
+            transition: opacity 0.5s ease; /* Smooth opacity transition */
         }
+
+        .content-container.hidden {
+            opacity: 0; /* Fully hide container on transition */
+        }
+
         .welcome-text {
             font-size: 100px;
             margin-bottom: 10px;
         }
+
         .description-text {
             font-size: 18px;
             color: #fff7f7; /* Medium dark text color */
             margin-bottom: 20px; /* Space between text and button */
         }
+
         /* Styling for circular start button */
         .start-button {
             background-color: #007bff; /* Blue background color */
@@ -52,13 +82,16 @@
             font-size: 14px;
             cursor: pointer;
             border: none;
-            border-radius: 5px;
-            padding: 10px 20px; /* Adjust padding for button size */
+            padding: 20px; /* Adjust padding for button size */
             font-family: Arial;
+            text-decoration: none; /* Remove default text underline */
+            transition: background-color 0.3s ease; /* Smooth hover transition */
         }
+
         .start-button:hover {
             background-color: #0056b3; /* Darker blue on hover */
         }
+
         .start-button svg {
             fill: white; /* SVG icon color */
             width: 24px; /* SVG icon width */
@@ -68,8 +101,11 @@
     </style>
 </head>
 <body>
-    <!-- Background iframe -->
-    <iframe class="iframe-background" src='https://my.spline.design/particles-54aabc991f497ce1af47f90a5d55a6e8/' frameborder='0'></iframe>
+    <canvas id="hyperspaceCanvas"></canvas>
+    <div class="foreground" id="foreground">
+        <h1>Embark on an Adventure</h1>
+        <!-- Additional content or controls can be placed here -->
+    </div>
 
     <!-- Main content -->
     <div class="content-container">
@@ -77,7 +113,7 @@
         <div class="description-text">Discover my work and projects</div>
         
         <!-- Circular start button -->
-        <button class="start-button" onclick="redirectToPortfolio()">
+        <button class="start-button" onclick="startHyperspace()">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M8 5v14l11-7z"/>
             </svg>
@@ -86,8 +122,105 @@
     </div>
 
     <script>
-        function redirectToPortfolio() {
-            window.location.href = "main.html"; // Replace with your portfolio URL
+        const canvas = document.getElementById('hyperspaceCanvas');
+        const ctx = canvas.getContext('2d');
+        let animationId = null;
+        let hyperspaceStartTime = null;
+
+        // Set canvas dimensions
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Center coordinates
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+
+        // Star class
+        class Star {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.baseSpeed = Math.random() * 0.5 + 0.1;
+                this.speed = this.baseSpeed;
+                this.angle = Math.atan2(centerY - this.y, centerX - this.x);
+                this.velX = Math.cos(this.angle) * this.speed;
+                this.velY = Math.sin(this.angle) * this.speed;
+            }
+
+            update() {
+                if (hyperspaceStartTime) {
+                    const elapsed = (Date.now() - hyperspaceStartTime) / 1000; // elapsed time in seconds
+                    this.speed = this.baseSpeed + Math.min(elapsed * 20, 50); // accelerate over time
+                    this.velX = Math.cos(this.angle) * this.speed;
+                    this.velY = Math.sin(this.angle) * this.speed;
+                }
+
+                this.x += this.velX;
+                this.y += this.velY;
+
+                // Wrap stars around the screen edges
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.baseSpeed = Math.random() * 0.5 + 0.1;
+                    this.speed = this.baseSpeed;
+                    this.angle = Math.atan2(centerY - this.y, centerX - this.x);
+                    this.velX = Math.cos(this.angle) * this.speed;
+                    this.velY = Math.sin(this.angle) * this.speed;
+                }
+            }
+
+            draw() {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // Array to store stars
+        let stars = [];
+        for (let i = 0; i < 100; i++) {
+            stars.push(new Star());
+        }
+
+        // Animation loop
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            stars.forEach(star => {
+                star.update();
+                star.draw();
+            });
+
+            animationId = requestAnimationFrame(animate);
+        }
+
+        // Start animation
+        animate();
+
+        // Start hyperspace animation on button click
+        function startHyperspace() {
+            // Hide content container
+            const contentContainer = document.querySelector('.content-container');
+            contentContainer.classList.add('hidden');
+
+            // Show the h1 element
+            const foreground = document.getElementById('foreground');
+            foreground.classList.add('visible');
+
+            // Mark the start time of the hyperspace
+            hyperspaceStartTime = Date.now();
+
+            // Restart animation to apply speed changes
+            cancelAnimationFrame(animationId);
+            animate();
+
+            // Redirect to another page after animation
+            setTimeout(() => {
+                window.location.href = "main.html"; // Replace with your desired URL
+            }, 3000); // Adjust timeout as needed
         }
     </script>
 </body>
