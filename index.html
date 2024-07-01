@@ -11,7 +11,6 @@
             font-family: Arial, sans-serif;
             overflow: hidden; /* Prevent scrollbars */
             position: relative; /* Ensure relative positioning for absolute elements */
-            background-color: #f0f0f0; /* Light background color */
         }
         .iframe-background {
             position: fixed;
@@ -20,8 +19,11 @@
             width: 100%;
             height: 100%;
             z-index: -1; /* Send iframe to the back */
+            pointer-events: none; /* Allow clicking through iframe */
         }
         .content-container {
+            position: relative; /* Ensure content is above iframe */
+            z-index: 1; /* Ensure content is above iframe */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -67,8 +69,7 @@
 </head>
 <body>
     <!-- Background iframe -->
-    <iframe class="iframe-background" src="https://my.spline.design/particles-6a6d3cc83bb368ffbb32a8eb99c3d172/" frameborder="0"></iframe>
-
+    <iframe class="iframe-background" src='https://my.spline.design/particles-54aabc991f497ce1af47f90a5d55a6e8/' frameborder='0'></iframe>
 
     <!-- Main content -->
     <div class="content-container">
