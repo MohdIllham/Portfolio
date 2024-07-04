@@ -32,7 +32,7 @@
         }
 
         .toggle-button img {
-            max-width: 50px; /* Adjust image size as needed */
+            max-width: 100px; /* Adjust image size as needed */
         }
 
         .toggle-button span {
@@ -162,6 +162,25 @@
             left: -100%; /* Adjust the left position as needed */
             display: block;
         }
+
+
+        #toggle-button-4 {
+            padding: 10px; /* Adjust padding */
+            border-radius: 12px; /* Adjust border radius */
+            font-size: 1.5vw; /* Adjust font size */
+            position: absolute; /* Ensure absolute positioning */
+            right: 30%; /* Position 50% from the right edge of the nearest positioned ancestor */
+            bottom: 65%; /* Position 50% from the bottom edge of the nearest positioned ancestor */
+            transform: translate(50%, 50%); /* Adjust position to center the button */
+        }
+
+        #toggle-button-4:hover span {
+            bottom: 0; /* Move hover text up on hover */
+            left: -100%; /* Adjust the left position as needed */
+            display: block;
+        }
+
+
 
         /* Styles for specific button containers */
         #button1-container {
@@ -331,6 +350,17 @@
         <div class="hidden-buttons" id="hiddenButtons3">
             <button onclick="window.location.href='https://example.com/cv';">Download My CV</button>
         </div>
+    
+    <div class="toggle-container">
+         <button id="toggle-button-4" class="toggle-button" onclick="toggleContent(4)">
+                <img src="./assets/linkedin.png" alt="Toggle Image">
+                <span>Let's Connect With Each Other</span>
+            </button>
+            <p class="hidden-text" id="hiddenText4">Can find me on :</p>
+            <div class="hidden-buttons" id="hiddenButtons4">
+                <button onclick="window.location.href='https://www.linkedin.com/in/mohdillham/';">Find me on Linkedin: mohdillham</button>
+            </div>
+        
     </div>
 
     <!-- JavaScript for music control -->
